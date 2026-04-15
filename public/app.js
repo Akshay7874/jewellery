@@ -633,7 +633,7 @@ async function ensureAdminSession() {
     state.session = session;
     return session;
   } catch (error) {
-    window.location.replace("/admin.html");
+    window.location.replace("/login.html");
     return null;
   }
 }
@@ -771,7 +771,7 @@ function bindAdminEvents() {
 
   logoutButton?.addEventListener("click", async () => {
     await fetchJson("/api/admin/logout", { method: "POST" });
-    window.location.href = "/admin.html";
+    window.location.href = "/login.html";
   });
 }
 

@@ -6,11 +6,9 @@ const { serveAdminEntry } = require("./controllers/publicController");
 
 const app = express();
 const publicDir = path.join(process.cwd(), "public");
-const uploadsDir = path.join(process.cwd(), "uploads");
 
 app.use(express.json({ limit: "1mb" }));
 app.get("/admin.html", asyncHandler(serveAdminEntry));
-app.use("/uploads", express.static(uploadsDir));
 app.use(express.static(publicDir));
 app.use("/api", apiRoutes);
 

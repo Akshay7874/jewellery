@@ -1,8 +1,16 @@
-const fs = require("fs");
-const path = require("path");
 const crypto = require("crypto");
 const Product = require("../models/Product");
 const { sanitizeText } = require("../utils/sanitize");
+
+function buildProductImage(file) {
+  if (!file) {
+    return "";
+  }
+
+  const mimeType = file.mimetype || "image/jpeg";
+  const base64 = file.buffer.toString("base64");
+  return `data:${mimeType};base64,${base64}`;
+}
 
 async function createProduct(req, res) {
   const name = sanitizeText(req.body.name);
@@ -28,7 +36,7 @@ async function createProduct(req, res) {
     description,
     price,
     featured,
-    imageUrl: req.file ? `/uploads/${req.file.filename}` : ""
+    imageUrl: buildProductImage(req.file)
   });
 
   const { _id, __v, ...rest } = product.toObject();
@@ -42,16 +50,7 @@ async function deleteProduct(req, res) {
     return res.status(404).json({ error: "Product not found." });
   }
 
-  const imageUrl = product.imageUrl;
   await product.deleteOne();
-
-  if (imageUrl) {
-    const imagePath = path.join(process.cwd(), imageUrl.replace(/^\//, ""));
-    if (fs.existsSync(imagePath)) {
-      fs.unlinkSync(imagePath);
-    }
-  }
-
   res.json({ success: true });
 }
 

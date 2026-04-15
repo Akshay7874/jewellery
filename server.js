@@ -8,6 +8,7 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 async function startServer() {
+
   await connectDatabase();
   await seedDatabase();
 

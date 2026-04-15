@@ -1,7 +1,5 @@
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
 const asyncHandler = require("../utils/asyncHandler");
 const requireAdmin = require("../middleware/requireAdmin");
 const publicController = require("../controllers/publicController");
@@ -10,18 +8,13 @@ const settingsController = require("../controllers/settingsController");
 const productsController = require("../controllers/productsController");
 const enquiryController = require("../controllers/enquiryController");
 
-const uploadsDir = path.join(process.cwd(), "uploads");
-fs.mkdirSync(uploadsDir, { recursive: true });
-
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => cb(null, uploadsDir),
-  filename: (_req, file, cb) => {
-    const safeBaseName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, "-");
-    cb(null, `${Date.now()}-${safeBaseName}`);
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 4 * 1024 * 1024
   }
 });
 
-const upload = multer({ storage });
 const router = express.Router();
 
 router.get("/products", asyncHandler(publicController.getProducts));
