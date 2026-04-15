@@ -1,0 +1,5 @@
+[dev]
+  command = "node server.js"  # The command to start your server
+  targetPort = 3000           # The port your server.js actually listens on
+  port = 8888                 # The port you will visit in your browser
+  framework = "#custom"       # Tells Netlify this is a custom setup

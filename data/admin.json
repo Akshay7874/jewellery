@@ -1,0 +1,12 @@
+{
+  "email": "akshaykar7874@gmail.com",
+  "passwordHash": "dfa7dd313ae4ff508d744056aefa472f2e81e5216e7291d63fcf0e08ebe2653a9217a871eb7c49fa322f97c173c1f9ce662badc9afa955af820976a494097bd1",
+  "passwordSalt": "a4f537e31fe0ad523aae92b11472feb4",
+  "sessions": [
+    {
+      "token": "87a7164a56ac437e5f79a29bc7290a8a235e0145f9966e0b",
+      "createdAt": "2026-04-15T06:48:16.052Z",
+      "expiresAt": "2026-04-22T06:48:16.052Z"
+    }
+  ]
+}

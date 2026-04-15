@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login | Muskan Jewellery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body class="page-pending" data-page="admin-login">
+    <div class="site-backdrop"></div>
+
+    <main class="auth-page shell">
+      <section class="auth-hero reveal">
+        <div>
+          <p class="eyebrow">Protected Admin Access</p>
+          <h1>Only the Muskan Jewellery admin can open the dashboard.</h1>
+          <p>
+            This panel is reserved for the configured admin email `akshaykar7874@gmail.com`. Set a password once, then log in to manage products, enquiries, and Gmail settings.
+          </p>
+          <a class="button button--glass" href="/">Back To Storefront</a>
+        </div>
+
+        <div class="auth-hero__orb">
+          <div class="auth-hero__ring"></div>
+          <div class="auth-hero__ring auth-hero__ring--small"></div>
+        </div>
+      </section>
+
+      <section class="auth-card reveal">
+        <div class="auth-card__header">
+          <p class="eyebrow">Admin Email</p>
+          <h2 id="adminEmailDisplay">akshaykar7874@gmail.com</h2>
+        </div>
+
+        <form class="auth-form" id="setupForm" hidden>
+          <label>
+            Admin email
+            <input name="email" type="email" value="akshaykar7874@gmail.com" readonly />
+          </label>
+          <label>
+            Create password
+            <input name="password" type="password" placeholder="Create admin password" required />
+          </label>
+          <button class="button button--solid" type="submit">Set Admin Password</button>
+          <p class="form-message" id="setupMessage"></p>
+        </form>
+
+        <form class="auth-form" id="loginForm" hidden>
+          <label>
+            Admin email
+            <input name="email" type="email" value="akshaykar7874@gmail.com" readonly />
+          </label>
+          <label>
+            Password
+            <input name="password" type="password" placeholder="Enter admin password" required />
+          </label>
+          <button class="button button--solid" type="submit">Open Admin Panel</button>
+          <p class="form-message" id="loginMessage"></p>
+        </form>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | Muskan Jewellery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body class="page-pending" data-page="admin">
+    <div class="site-backdrop"></div>
+
+    <header class="topbar shell">
+      <a class="brand" href="/">
+        <span class="brand__crest">MJ</span>
+        <span>
+          <strong>Muskan Jewellery</strong>
+          <small>Admin Studio</small>
+        </span>
+      </a>
+
+      <nav class="nav">
+        <a href="/">Storefront</a>
+        <a href="#settings">Settings</a>
+        <a href="#catalog">Catalog</a>
+        <a href="#password">Password</a>
+        <a href="#enquiries">Enquiries</a>
+      </nav>
+    </header>
+
+    <main class="admin-page shell">
+      <section class="admin-hero reveal">
+        <div>
+          <p class="eyebrow">Private Dashboard</p>
+          <h1>Manage Muskan Jewellery with a protected admin-only panel.</h1>
+          <p>Signed in as <strong id="sessionEmail">akshaykar7874@gmail.com</strong></p>
+        </div>
+
+        <button class="button button--glass" id="logoutButton" type="button">Log Out</button>
+      </section>
+
+      <section class="admin-section reveal" id="settings">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Storefront Settings</p>
+            <h2>Update landing page copy and Gmail delivery details.</h2>
+          </div>
+          <p>The admin email is fixed to `akshaykar7874@gmail.com` for secure access.</p>
+        </div>
+
+        <form class="admin-form" id="settingsForm">
+          <label>
+            Brand name
+            <input name="brandName" type="text" required />
+          </label>
+
+          <label>
+            Seller name
+            <input name="sellerName" type="text" required />
+          </label>
+
+          <label>
+            Hero title
+            <input name="heroTitle" type="text" required />
+          </label>
+
+          <label>
+            Hero text
+            <textarea name="heroText" rows="4" required></textarea>
+          </label>
+
+          <label>
+            Accent note
+            <input name="accentNote" type="text" required />
+          </label>
+
+          <label>
+            Atelier note
+            <textarea name="atelierNote" rows="4" required></textarea>
+          </label>
+
+          <label>
+            Metals note
+            <input name="metalsNote" type="text" required />
+          </label>
+
+          <label>
+            Boutique location
+            <input name="boutiqueLocation" type="text" required />
+          </label>
+
+          <label>
+            Contact email
+            <input name="contactEmail" type="email" required />
+          </label>
+
+          <label>
+            Gmail sender
+            <input name="gmailUser" type="email" value="akshaykar7874@gmail.com" readonly />
+          </label>
+
+          <label>
+            Gmail app password
+            <input name="gmailAppPassword" type="password" placeholder="Enter Gmail app password" />
+          </label>
+
+          <label>
+            WhatsApp number
+            <input name="whatsappNumber" type="text" />
+          </label>
+
+          <button class="button button--solid" type="submit">Save Storefront Settings</button>
+          <p class="form-message" id="settingsMessage"></p>
+        </form>
+      </section>
+
+      <section class="admin-section reveal" id="catalog">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Product Upload</p>
+            <h2>Add jewellery image, details, and pricing.</h2>
+          </div>
+          <p>New uploads appear on the Muskan Jewellery landing page immediately.</p>
+        </div>
+
+        <form class="admin-form" id="productForm">
+          <label>
+            Product name
+            <input name="name" type="text" required />
+          </label>
+
+          <label>
+            Category
+            <input name="category" type="text" placeholder="Bridal Gold, Silver Edit, Rings..." required />
+          </label>
+
+          <label>
+            Description
+            <textarea name="description" rows="4" required></textarea>
+          </label>
+
+          <label>
+            Price
+            <input name="price" type="number" min="1" step="0.01" required />
+          </label>
+
+          <label class="checkbox-row">
+            <input name="featured" type="checkbox" value="true" />
+            Mark as featured
+          </label>
+
+          <label>
+            Product image
+            <input name="image" type="file" accept="image/*" />
+          </label>
+
+          <button class="button button--solid" type="submit">Upload Jewellery</button>
+          <p class="form-message" id="productMessage"></p>
+        </form>
+
+        <div class="admin-grid" id="adminProductList"></div>
+      </section>
+
+      <section class="admin-section reveal" id="password">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Admin Security</p>
+            <h2>Change the admin password for `akshaykar7874@gmail.com`.</h2>
+          </div>
+          <p>This password protects the whole admin dashboard.</p>
+        </div>
+
+        <form class="admin-form admin-form--compact" id="passwordForm">
+          <label>
+            Current password
+            <input name="currentPassword" type="password" required />
+          </label>
+
+          <label>
+            New password
+            <input name="nextPassword" type="password" required />
+          </label>
+
+          <button class="button button--solid" type="submit">Update Password</button>
+          <p class="form-message" id="passwordMessage"></p>
+        </form>
+      </section>
+
+      <section class="admin-section reveal" id="enquiries">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Customer Enquiries</p>
+            <h2>Recent messages sent successfully to Gmail.</h2>
+          </div>
+          <p>Only the authenticated admin can see these enquiries.</p>
+        </div>
+
+        <div class="admin-stack" id="enquiryList"></div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
