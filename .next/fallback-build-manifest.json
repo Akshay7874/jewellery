@@ -1,0 +1,13 @@
+{
+  "pages": {
+    "/_app": []
+  },
+  "devFiles": [],
+  "polyfillFiles": [],
+  "lowPriorityFiles": [
+    "static/laEPusi19nq4wRdHNZ4rD/_buildManifest.js",
+    "static/laEPusi19nq4wRdHNZ4rD/_ssgManifest.js",
+    "static/laEPusi19nq4wRdHNZ4rD/_clientMiddlewareManifest.js"
+  ],
+  "rootMainFiles": []
+}

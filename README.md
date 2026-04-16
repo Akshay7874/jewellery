@@ -1,39 +1,25 @@
-# Muskan Jewellery
+# Muskan Jewellery - Next.js Rebuild
 
-A premium jewellery storefront with a MongoDB-only backend that also stores uploaded product images in MongoDB, making it safer for Vercel deployments.
+A premium jewellery storefront rebuilt in Next.js with:
 
-## Backend Stack
+- Next.js App Router
+- MongoDB with Mongoose
+- Protected admin login
+- Product uploads stored in MongoDB as base64 data URLs
+- Gmail enquiry forwarding with app password
+- Premium white luxury storefront UI
 
-- Express
-- Mongoose
-- MongoDB Atlas via `.env`
-- Nodemailer for Gmail enquiries
-- Multer memory uploads
-- `serverless-http` for Vercel serverless runtime
+## Environment Variables
 
-## Structure
-
-- `server.js`: local startup entry
-- `api/index.js`: Vercel serverless entrypoint
-- `src/app.js`: Express app setup
-- `src/config/`: Mongo connection, defaults, seeding
-- `src/models/`: Mongoose models
-- `src/controllers/`: route logic
-- `src/routes/`: API routes
-- `src/middleware/`: auth middleware
-- `src/utils/`: password, cookies, async helpers
-
-## Environment
-
-Create `C:\Users\Elcom\Desktop\jewellery\.env` with:
+Create `.env` with:
 
 ```env
-PORT=3000
-MONGODB_URI=mongodb+srv://your-db-user:your-encoded-password@your-cluster.mongodb.net/jewellery?retryWrites=true&w=majority&appName=jewellery
+MONGODB_URI=your_mongodb_connection_string
 MONGODB_DB_NAME=jewellery
+ADMIN_EMAIL=akshaykar7874@gmail.com
 ```
 
-## Start Locally
+## Run Locally
 
 ```bash
 npm install
@@ -42,27 +28,29 @@ npm run dev
 
 Open:
 
-- `http://localhost:3000/`
-- `http://localhost:3000/admin.html`
+- `http://localhost:3000/` - storefront
+- `http://localhost:3000/login` - admin login/setup
+- `http://localhost:3000/admin` - protected admin dashboard
 
-## Vercel Notes
+## Deploy
 
-- `vercel.json` rewrites `/api/*` and `/admin.html` into the serverless function.
-- Product images are stored in MongoDB as data URLs instead of local files.
-- This avoids Vercel filesystem upload problems and removes any runtime dependency on an `uploads/` folder.
+This rebuild is ready for Vercel and Next.js-compatible Netlify deployment.
+
+### Vercel
+
+- Import the project
+- Add the same environment variables in project settings
+- Deploy
+
+### Netlify
+
+- Use Next.js runtime support
+- Add the same environment variables
+- Deploy
 
 ## Notes
 
-- JSON storage has been removed from the app logic.
-- Admin email is fixed to `akshaykar7874@gmail.com`.
-- Store settings, Gmail app password, enquiries, products, images, and admin session data are all stored in MongoDB.
-
-## If MongoDB Does Not Connect
-
-Check these Atlas items:
-
-- The cluster hostname from Atlas `Connect > Drivers` is exactly correct
-- The database username is exactly correct
-- The password is correct
-- The password is URL-encoded if it contains symbols like `@`
-- Your IP is allowed in Atlas Network Access
+- The admin email is fixed through `ADMIN_EMAIL`
+- The first login flow lets you set the admin password
+- Product images are stored in MongoDB, so there is no local uploads folder dependency
+- Customer enquiries are saved in MongoDB and optionally emailed through Gmail if an app password is saved in admin settings
