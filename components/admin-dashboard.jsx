@@ -250,8 +250,8 @@ export default function AdminDashboard({ sessionEmail, settings, products, enqui
               Mark as featured
             </label>
             <label>
-              Product image
-              <input name="image" type="file" accept="image/*" />
+              Product photos
+              <input name="images" type="file" accept="image/*" multiple />
             </label>
             <button className="button button--solid" type="submit" disabled={busyAction === "product"}>
               {busyAction === "product" ? "Uploading..." : "Upload Jewellery"}

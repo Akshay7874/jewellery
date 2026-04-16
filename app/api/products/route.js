@@ -21,17 +21,21 @@ export async function POST(request) {
   const description = String(formData.get("description") || "").trim();
   const price = Number(formData.get("price") || 0);
   const featured = String(formData.get("featured") || "false") === "true";
-  const image = formData.get("image");
+  const images = formData
+    .getAll("images")
+    .filter((file) => typeof file === "object" && file.size);
 
   if (!name || !category || !description || !price) {
     return NextResponse.json({ error: "Name, category, description, and price are required." }, { status: 400 });
   }
 
-  let imageUrl = "";
+  const imageUrls = [];
 
-  if (image && typeof image === "object" && image.size) {
-    imageUrl = await fileToDataUrl(image);
+  for (const image of images) {
+    imageUrls.push(await fileToDataUrl(image));
   }
+
+  const imageUrl = imageUrls[0] || "";
 
   const baseId = slugifyProductId(name);
   let productId = baseId;
@@ -49,7 +53,8 @@ export async function POST(request) {
     description,
     price,
     featured,
-    imageUrl
+    imageUrl,
+    imageUrls
   });
 
   return NextResponse.json(serialiseProduct(product.toObject()), { status: 201 });

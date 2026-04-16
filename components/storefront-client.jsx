@@ -45,8 +45,11 @@ export default function StorefrontClient({ initialSettings, initialProducts }) {
   const [activeMetal, setActiveMetal] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [slideIndex, setSlideIndex] = useState(0);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [detailOpen, setDetailOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState("");
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [formMessage, setFormMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
 
@@ -81,6 +84,15 @@ export default function StorefrontClient({ initialSettings, initialProducts }) {
     () => products.find((product) => product.id === selectedProductId) || null,
     [products, selectedProductId]
   );
+
+  const selectedProductImages = useMemo(() => {
+    if (!selectedProduct) {
+      return [];
+    }
+
+    const imageUrls = Array.isArray(selectedProduct.imageUrls) ? selectedProduct.imageUrls.filter(Boolean) : [];
+    return imageUrls.length ? imageUrls : selectedProduct.imageUrl ? [selectedProduct.imageUrl] : [];
+  }, [selectedProduct]);
 
   useEffect(() => {
     if (carouselProducts.length < 2) {
@@ -142,6 +154,16 @@ export default function StorefrontClient({ initialSettings, initialProducts }) {
     setModalOpen(true);
   }
 
+  function openProductDetails(productId) {
+    setSelectedProductId(productId);
+    setSelectedImageIndex(0);
+    setDetailOpen(true);
+  }
+
+  function closeProductDetails() {
+    setDetailOpen(false);
+  }
+
   return (
     <div className="page-shell">
       <div className="announcement-bar">
@@ -185,6 +207,15 @@ export default function StorefrontClient({ initialSettings, initialProducts }) {
               <a href="#contact">Contact</a>
               <a href="/login">Admin</a>
             </nav>
+
+            <button
+              className="mobile-menu-button"
+              type="button"
+              aria-label="Open menu"
+              onClick={() => setMobileNavOpen(true)}
+            >
+              Menu
+            </button>
           </div>
         </div>
 
@@ -220,6 +251,72 @@ export default function StorefrontClient({ initialSettings, initialProducts }) {
           </div>
         </div>
       </header>
+
+      <div className={`mobile-drawer-backdrop ${mobileNavOpen ? "is-open" : ""}`} onClick={() => setMobileNavOpen(false)}>
+        <aside className={`mobile-drawer ${mobileNavOpen ? "is-open" : ""}`} onClick={(event) => event.stopPropagation()}>
+          <div className="mobile-drawer__head">
+            <div>
+              <span className="eyebrow">Browse Menu</span>
+              <h3>{settings.brandName}</h3>
+            </div>
+            <button type="button" className="modal-close" onClick={() => setMobileNavOpen(false)}>
+              ×
+            </button>
+          </div>
+
+          <div className="mobile-drawer__section">
+            <span className="mobile-drawer__label">Sections</span>
+            <nav className="mobile-drawer__links">
+              <a href="#collections" onClick={() => setMobileNavOpen(false)}>Collections</a>
+              <a href="#story" onClick={() => setMobileNavOpen(false)}>Muskan</a>
+              <a href="#contact" onClick={() => setMobileNavOpen(false)}>Contact</a>
+              <a href="/login" onClick={() => setMobileNavOpen(false)}>Admin</a>
+            </nav>
+          </div>
+
+          <div className="mobile-drawer__section">
+            <span className="mobile-drawer__label">Categories</span>
+            <div className="mobile-drawer__chips">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  className={activeCategory === category ? "is-active" : ""}
+                  onClick={() => {
+                    setActiveCategory(category);
+                    setMobileNavOpen(false);
+                  }}
+                >
+                  {category === "all" ? "All Jewellery" : category}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mobile-drawer__section">
+            <span className="mobile-drawer__label">Metal Filter</span>
+            <div className="mobile-drawer__chips">
+              {[
+                { label: "All Jewellery", value: "all" },
+                { label: "Silver Jewellery", value: "silver" },
+                { label: "Gold Jewellery", value: "gold" }
+              ].map((item) => (
+                <button
+                  key={item.value}
+                  type="button"
+                  className={activeMetal === item.value ? "is-active" : ""}
+                  onClick={() => {
+                    setActiveMetal(item.value);
+                    setMobileNavOpen(false);
+                  }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </div>
 
       <main id="top">
         <section className="showcase-section">
@@ -318,7 +415,7 @@ export default function StorefrontClient({ initialSettings, initialProducts }) {
             <div className="rail-track-wrap">
               <div className={`rail-track ${railProducts.length > 3 ? "is-animated" : ""}`}>
                 {[...(railProducts.length > 3 ? [...railProducts, ...railProducts] : railProducts)].map((product, index) => (
-                  <button className="rail-card" key={`${product.id}-${index}`} type="button" onClick={() => openEnquiry(product.id)}>
+                  <button className="rail-card" key={`${product.id}-${index}`} type="button" onClick={() => openProductDetails(product.id)}>
                     <ProductArt product={product} className="rail-card__image" />
                     <span>{product.category}</span>
                     <strong>{product.name}</strong>
@@ -329,25 +426,7 @@ export default function StorefrontClient({ initialSettings, initialProducts }) {
           </div>
         </section>
 
-        <section className="info-section">
-          <div className="container info-grid">
-            <article>
-              <span className="eyebrow">Bridal Ready</span>
-              <h3>Wedding looks and grand gifting pieces.</h3>
-              <p>Premium gold, silver, and celebration-led jewellery arranged for a boutique shopping experience.</p>
-            </article>
-            <article>
-              <span className="eyebrow">Searchable Frontend</span>
-              <h3>Fast discovery with category and metal filters.</h3>
-              <p>The navbar search and category tabs help customers find rings, sets, and edits quickly.</p>
-            </article>
-            <article>
-              <span className="eyebrow">Direct Enquiry</span>
-              <h3>Every piece can turn into a customer conversation.</h3>
-              <p>Customers can ask price, styling, and availability questions directly from the landing page.</p>
-            </article>
-          </div>
-        </section>
+      
 
         <section className="collections-section" id="collections">
           <div className="container">
@@ -365,7 +444,19 @@ export default function StorefrontClient({ initialSettings, initialProducts }) {
 
             <div className="product-grid">
               {(filteredProducts.length ? filteredProducts : products).map((product) => (
-                <article className="product-card" key={product.id}>
+                <article
+                  className="product-card product-card--interactive"
+                  key={product.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => openProductDetails(product.id)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      openProductDetails(product.id);
+                    }
+                  }}
+                >
                   <ProductArt product={product} className="product-card__image" />
                   <div className="product-card__body">
                     <div className="product-card__meta">
@@ -376,9 +467,28 @@ export default function StorefrontClient({ initialSettings, initialProducts }) {
                     <p>{product.description}</p>
                     <div className="product-card__footer">
                       <strong>{formatPrice(product.price)}</strong>
-                      <button className="button button--ghost" type="button" onClick={() => openEnquiry(product.id)}>
-                        Enquire
-                      </button>
+                      <div className="product-card__actions">
+                        <button
+                          className="button button--ghost"
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            openProductDetails(product.id);
+                          }}
+                        >
+                          View Details
+                        </button>
+                        <button
+                          className="button button--solid"
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            openEnquiry(product.id);
+                          }}
+                        >
+                          Enquire
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </article>
@@ -460,6 +570,83 @@ export default function StorefrontClient({ initialSettings, initialProducts }) {
               </button>
               <p className="form-feedback">{formMessage}</p>
             </form>
+          </div>
+        </div>
+      ) : null}
+
+      {detailOpen && selectedProduct ? (
+        <div className="modal-backdrop" onClick={closeProductDetails}>
+          <div className="modal-card modal-card--detail" onClick={(event) => event.stopPropagation()}>
+            <div className="modal-head">
+              <div>
+                <span className="eyebrow">Jewellery Details</span>
+                <h3>{selectedProduct.name}</h3>
+              </div>
+              <button type="button" className="modal-close" onClick={closeProductDetails}>
+                ×
+              </button>
+            </div>
+
+            <div className="detail-layout">
+              <div className={`detail-visual detail-visual--${inferMetal(selectedProduct)}`}>
+                {selectedProductImages.length ? (
+                  <img className="detail-image" src={selectedProductImages[selectedImageIndex]} alt={selectedProduct.name} />
+                ) : (
+                  <ProductArt product={selectedProduct} className="detail-image" />
+                )}
+              </div>
+
+              <div className="detail-copy">
+                <div className="detail-copy__meta">
+                  <span>{selectedProduct.category}</span>
+                  {selectedProduct.featured ? <mark>Featured</mark> : null}
+                </div>
+                <strong className="detail-price">{formatPrice(selectedProduct.price)}</strong>
+                <p>{selectedProduct.description}</p>
+
+                {selectedProductImages.length > 1 ? (
+                  <div className="detail-thumbnails">
+                    {selectedProductImages.map((imageUrl, index) => (
+                      <button
+                        key={`${selectedProduct.id}-${index}`}
+                        type="button"
+                        className={selectedImageIndex === index ? "is-active" : ""}
+                        onClick={() => setSelectedImageIndex(index)}
+                      >
+                        <img src={imageUrl} alt={`${selectedProduct.name} ${index + 1}`} />
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+
+                <div className="detail-note-grid">
+                  <div>
+                    <strong>Boutique Guidance</strong>
+                    <span>Ask about styling, gifting, festive looks, and occasion pairing.</span>
+                  </div>
+                  <div>
+                    <strong>Direct Enquiry</strong>
+                    <span>Connect with Muskan for availability, pricing, and delivery support.</span>
+                  </div>
+                </div>
+
+                <div className="detail-actions">
+                  <button
+                    className="button button--solid"
+                    type="button"
+                    onClick={() => {
+                      closeProductDetails();
+                      openEnquiry(selectedProduct.id);
+                    }}
+                  >
+                    Ask About This Piece
+                  </button>
+                  <button className="button button--ghost" type="button" onClick={closeProductDetails}>
+                    Continue Browsing
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       ) : null}

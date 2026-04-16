@@ -63,8 +63,11 @@ function StorefrontClient({ initialSettings, initialProducts }) {
     const [activeMetal, setActiveMetal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("all");
     const [searchQuery, setSearchQuery] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [slideIndex, setSlideIndex] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [mobileNavOpen, setMobileNavOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [modalOpen, setModalOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [detailOpen, setDetailOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [selectedProductId, setSelectedProductId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
+    const [selectedImageIndex, setSelectedImageIndex] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(0);
     const [formMessage, setFormMessage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [isSending, setIsSending] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const categories = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>[
@@ -106,6 +109,17 @@ function StorefrontClient({ initialSettings, initialProducts }) {
     const selectedProduct = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>products.find((product)=>product.id === selectedProductId) || null, [
         products,
         selectedProductId
+    ]);
+    const selectedProductImages = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        if (!selectedProduct) {
+            return [];
+        }
+        const imageUrls = Array.isArray(selectedProduct.imageUrls) ? selectedProduct.imageUrls.filter(Boolean) : [];
+        return imageUrls.length ? imageUrls : selectedProduct.imageUrl ? [
+            selectedProduct.imageUrl
+        ] : [];
+    }, [
+        selectedProduct
     ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         if (carouselProducts.length < 2) {
@@ -163,6 +177,14 @@ function StorefrontClient({ initialSettings, initialProducts }) {
         setFormMessage("");
         setModalOpen(true);
     }
+    function openProductDetails(productId) {
+        setSelectedProductId(productId);
+        setSelectedImageIndex(0);
+        setDetailOpen(true);
+    }
+    function closeProductDetails() {
+        setDetailOpen(false);
+    }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "page-shell",
         children: [
@@ -175,14 +197,14 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                             children: settings.accentNote
                         }, void 0, false, {
                             fileName: "[project]/components/storefront-client.jsx",
-                            lineNumber: 149,
+                            lineNumber: 171,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             children: settings.metalsNote
                         }, void 0, false, {
                             fileName: "[project]/components/storefront-client.jsx",
-                            lineNumber: 150,
+                            lineNumber: 172,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -192,18 +214,18 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/storefront-client.jsx",
-                            lineNumber: 151,
+                            lineNumber: 173,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/storefront-client.jsx",
-                    lineNumber: 148,
+                    lineNumber: 170,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/storefront-client.jsx",
-                lineNumber: 147,
+                lineNumber: 169,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
@@ -221,7 +243,7 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                         children: "MJ"
                                     }, void 0, false, {
                                         fileName: "[project]/components/storefront-client.jsx",
-                                        lineNumber: 158,
+                                        lineNumber: 180,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -230,7 +252,7 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                 children: settings.brandName
                                             }, void 0, false, {
                                                 fileName: "[project]/components/storefront-client.jsx",
-                                                lineNumber: 160,
+                                                lineNumber: 182,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
@@ -240,19 +262,19 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/storefront-client.jsx",
-                                                lineNumber: 161,
+                                                lineNumber: 183,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/storefront-client.jsx",
-                                        lineNumber: 159,
+                                        lineNumber: 181,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/storefront-client.jsx",
-                                lineNumber: 157,
+                                lineNumber: 179,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -266,20 +288,20 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                 children: "Where to deliver?"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/storefront-client.jsx",
-                                                lineNumber: 167,
+                                                lineNumber: 189,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                                                 children: "Update Pincode"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/storefront-client.jsx",
-                                                lineNumber: 168,
+                                                lineNumber: 190,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/storefront-client.jsx",
-                                        lineNumber: 166,
+                                        lineNumber: 188,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -290,7 +312,7 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                 children: "Search catalogue"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/storefront-client.jsx",
-                                                lineNumber: 172,
+                                                lineNumber: 194,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -301,13 +323,13 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                 onChange: (event)=>setSearchQuery(event.target.value)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/storefront-client.jsx",
-                                                lineNumber: 173,
+                                                lineNumber: 195,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/storefront-client.jsx",
-                                        lineNumber: 171,
+                                        lineNumber: 193,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -318,7 +340,7 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                 children: "Collections"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/storefront-client.jsx",
-                                                lineNumber: 183,
+                                                lineNumber: 205,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -326,7 +348,7 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                 children: "Muskan"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/storefront-client.jsx",
-                                                lineNumber: 184,
+                                                lineNumber: 206,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -334,7 +356,7 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                 children: "Contact"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/storefront-client.jsx",
-                                                lineNumber: 185,
+                                                lineNumber: 207,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -342,25 +364,36 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                 children: "Admin"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/storefront-client.jsx",
-                                                lineNumber: 186,
+                                                lineNumber: 208,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/storefront-client.jsx",
-                                        lineNumber: 182,
+                                        lineNumber: 204,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        className: "mobile-menu-button",
+                                        type: "button",
+                                        "aria-label": "Open menu",
+                                        onClick: ()=>setMobileNavOpen(true),
+                                        children: "Menu"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/storefront-client.jsx",
+                                        lineNumber: 211,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/storefront-client.jsx",
-                                lineNumber: 165,
+                                lineNumber: 187,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/storefront-client.jsx",
-                        lineNumber: 156,
+                        lineNumber: 178,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -375,12 +408,12 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                         children: category === "all" ? "All Jewellery" : category
                                     }, category, false, {
                                         fileName: "[project]/components/storefront-client.jsx",
-                                        lineNumber: 194,
+                                        lineNumber: 225,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/components/storefront-client.jsx",
-                                lineNumber: 192,
+                                lineNumber: 223,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -405,24 +438,233 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                         children: item.label
                                     }, item.value, false, {
                                         fileName: "[project]/components/storefront-client.jsx",
-                                        lineNumber: 211,
+                                        lineNumber: 242,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/components/storefront-client.jsx",
-                                lineNumber: 205,
+                                lineNumber: 236,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/storefront-client.jsx",
-                        lineNumber: 191,
+                        lineNumber: 222,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/storefront-client.jsx",
-                lineNumber: 155,
+                lineNumber: 177,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: `mobile-drawer-backdrop ${mobileNavOpen ? "is-open" : ""}`,
+                onClick: ()=>setMobileNavOpen(false),
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
+                    className: `mobile-drawer ${mobileNavOpen ? "is-open" : ""}`,
+                    onClick: (event)=>event.stopPropagation(),
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "mobile-drawer__head",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "eyebrow",
+                                            children: "Browse Menu"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 259,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                            children: settings.brandName
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 260,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/storefront-client.jsx",
+                                    lineNumber: 258,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    type: "button",
+                                    className: "modal-close",
+                                    onClick: ()=>setMobileNavOpen(false),
+                                    children: "×"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/storefront-client.jsx",
+                                    lineNumber: 262,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/storefront-client.jsx",
+                            lineNumber: 257,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "mobile-drawer__section",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "mobile-drawer__label",
+                                    children: "Sections"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/storefront-client.jsx",
+                                    lineNumber: 268,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
+                                    className: "mobile-drawer__links",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                            href: "#collections",
+                                            onClick: ()=>setMobileNavOpen(false),
+                                            children: "Collections"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 270,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                            href: "#story",
+                                            onClick: ()=>setMobileNavOpen(false),
+                                            children: "Muskan"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 271,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                            href: "#contact",
+                                            onClick: ()=>setMobileNavOpen(false),
+                                            children: "Contact"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 272,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                            href: "/login",
+                                            onClick: ()=>setMobileNavOpen(false),
+                                            children: "Admin"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 273,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/storefront-client.jsx",
+                                    lineNumber: 269,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/storefront-client.jsx",
+                            lineNumber: 267,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "mobile-drawer__section",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "mobile-drawer__label",
+                                    children: "Categories"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/storefront-client.jsx",
+                                    lineNumber: 278,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "mobile-drawer__chips",
+                                    children: categories.map((category)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            type: "button",
+                                            className: activeCategory === category ? "is-active" : "",
+                                            onClick: ()=>{
+                                                setActiveCategory(category);
+                                                setMobileNavOpen(false);
+                                            },
+                                            children: category === "all" ? "All Jewellery" : category
+                                        }, category, false, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 281,
+                                            columnNumber: 17
+                                        }, this))
+                                }, void 0, false, {
+                                    fileName: "[project]/components/storefront-client.jsx",
+                                    lineNumber: 279,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/storefront-client.jsx",
+                            lineNumber: 277,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "mobile-drawer__section",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "mobile-drawer__label",
+                                    children: "Metal Filter"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/storefront-client.jsx",
+                                    lineNumber: 297,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "mobile-drawer__chips",
+                                    children: [
+                                        {
+                                            label: "All Jewellery",
+                                            value: "all"
+                                        },
+                                        {
+                                            label: "Silver Jewellery",
+                                            value: "silver"
+                                        },
+                                        {
+                                            label: "Gold Jewellery",
+                                            value: "gold"
+                                        }
+                                    ].map((item)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            type: "button",
+                                            className: activeMetal === item.value ? "is-active" : "",
+                                            onClick: ()=>{
+                                                setActiveMetal(item.value);
+                                                setMobileNavOpen(false);
+                                            },
+                                            children: item.label
+                                        }, item.value, false, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 304,
+                                            columnNumber: 17
+                                        }, this))
+                                }, void 0, false, {
+                                    fileName: "[project]/components/storefront-client.jsx",
+                                    lineNumber: 298,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/storefront-client.jsx",
+                            lineNumber: 296,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/storefront-client.jsx",
+                    lineNumber: 256,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/components/storefront-client.jsx",
+                lineNumber: 255,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -443,33 +685,33 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                     children: "Premium Edit"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                    lineNumber: 229,
+                                                    lineNumber: 326,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                                                     children: settings.heroTitle
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                    lineNumber: 230,
+                                                    lineNumber: 327,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 228,
+                                            lineNumber: 325,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: settings.heroText
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 232,
+                                            lineNumber: 329,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 227,
+                                    lineNumber: 324,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -491,7 +733,7 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                                     className: "showcase-image"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                    lineNumber: 240,
+                                                                    lineNumber: 337,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -504,26 +746,26 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/components/storefront-client.jsx",
-                                                                            lineNumber: 242,
+                                                                            lineNumber: 339,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                                                                             children: product.category
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/storefront-client.jsx",
-                                                                            lineNumber: 243,
+                                                                            lineNumber: 340,
                                                                             columnNumber: 25
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                    lineNumber: 241,
+                                                                    lineNumber: 338,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/storefront-client.jsx",
-                                                            lineNumber: 239,
+                                                            lineNumber: 336,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -534,21 +776,21 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                                     children: "Signature Launch"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                    lineNumber: 247,
+                                                                    lineNumber: 344,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                                                     children: product.name
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                    lineNumber: 248,
+                                                                    lineNumber: 345,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                     children: product.description
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                    lineNumber: 249,
+                                                                    lineNumber: 346,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -560,20 +802,20 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                                                     children: formatPrice(product.price)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                                    lineNumber: 252,
+                                                                                    lineNumber: 349,
                                                                                     columnNumber: 27
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                     children: "Luxury pricing with boutique guidance"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                                    lineNumber: 253,
+                                                                                    lineNumber: 350,
                                                                                     columnNumber: 27
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/components/storefront-client.jsx",
-                                                                            lineNumber: 251,
+                                                                            lineNumber: 348,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -582,26 +824,26 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                                                     children: "Fast Enquiry"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                                    lineNumber: 256,
+                                                                                    lineNumber: 353,
                                                                                     columnNumber: 27
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                     children: "Customers can email Muskan directly"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                                    lineNumber: 257,
+                                                                                    lineNumber: 354,
                                                                                     columnNumber: 27
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/components/storefront-client.jsx",
-                                                                            lineNumber: 255,
+                                                                            lineNumber: 352,
                                                                             columnNumber: 25
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                    lineNumber: 250,
+                                                                    lineNumber: 347,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -613,7 +855,7 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                                             children: "Shop Collection"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/storefront-client.jsx",
-                                                                            lineNumber: 261,
+                                                                            lineNumber: 358,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -623,30 +865,30 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                                             children: "Ask About This Piece"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/storefront-client.jsx",
-                                                                            lineNumber: 264,
+                                                                            lineNumber: 361,
                                                                             columnNumber: 25
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                    lineNumber: 260,
+                                                                    lineNumber: 357,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/storefront-client.jsx",
-                                                            lineNumber: 246,
+                                                            lineNumber: 343,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, product.id || index, true, {
                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                    lineNumber: 238,
+                                                    lineNumber: 335,
                                                     columnNumber: 19
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 236,
+                                            lineNumber: 333,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -660,7 +902,7 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                     children: "‹"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                    lineNumber: 274,
+                                                    lineNumber: 371,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -677,25 +919,25 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                    lineNumber: 290,
+                                                                    lineNumber: 387,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
                                                                     children: product.category
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                    lineNumber: 291,
+                                                                    lineNumber: 388,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
                                                         }, product.id || index, true, {
                                                             fileName: "[project]/components/storefront-client.jsx",
-                                                            lineNumber: 284,
+                                                            lineNumber: 381,
                                                             columnNumber: 21
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                    lineNumber: 282,
+                                                    lineNumber: 379,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -706,30 +948,30 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                     children: "›"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                    lineNumber: 295,
+                                                    lineNumber: 392,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 273,
+                                            lineNumber: 370,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 235,
+                                    lineNumber: 332,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/storefront-client.jsx",
-                            lineNumber: 226,
+                            lineNumber: 323,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/storefront-client.jsx",
-                        lineNumber: 225,
+                        lineNumber: 322,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -747,33 +989,33 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                     children: "Shop By Style"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                    lineNumber: 312,
+                                                    lineNumber: 409,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                                     children: "Catalogue cards with a polished luxury feel."
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                    lineNumber: 313,
+                                                    lineNumber: 410,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 311,
+                                            lineNumber: 408,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: settings.atelierNote
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 315,
+                                            lineNumber: 412,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 310,
+                                    lineNumber: 407,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -788,161 +1030,55 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                         ].map((product, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                 className: "rail-card",
                                                 type: "button",
-                                                onClick: ()=>openEnquiry(product.id),
+                                                onClick: ()=>openProductDetails(product.id),
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(ProductArt, {
                                                         product: product,
                                                         className: "rail-card__image"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/storefront-client.jsx",
-                                                        lineNumber: 322,
+                                                        lineNumber: 419,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: product.category
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/storefront-client.jsx",
-                                                        lineNumber: 323,
+                                                        lineNumber: 420,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                                                         children: product.name
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/storefront-client.jsx",
-                                                        lineNumber: 324,
+                                                        lineNumber: 421,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, `${product.id}-${index}`, true, {
                                                 fileName: "[project]/components/storefront-client.jsx",
-                                                lineNumber: 321,
+                                                lineNumber: 418,
                                                 columnNumber: 19
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/components/storefront-client.jsx",
-                                        lineNumber: 319,
+                                        lineNumber: 416,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 318,
+                                    lineNumber: 415,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/storefront-client.jsx",
-                            lineNumber: 309,
+                            lineNumber: 406,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/storefront-client.jsx",
-                        lineNumber: 308,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-                        className: "info-section",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "container info-grid",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("article", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "eyebrow",
-                                            children: "Bridal Ready"
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 335,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                            children: "Wedding looks and grand gifting pieces."
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 336,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            children: "Premium gold, silver, and celebration-led jewellery arranged for a boutique shopping experience."
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 337,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 334,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("article", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "eyebrow",
-                                            children: "Searchable Frontend"
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 340,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                            children: "Fast discovery with category and metal filters."
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 341,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            children: "The navbar search and category tabs help customers find rings, sets, and edits quickly."
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 342,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 339,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("article", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "eyebrow",
-                                            children: "Direct Enquiry"
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 345,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                            children: "Every piece can turn into a customer conversation."
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 346,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            children: "Customers can ask price, styling, and availability questions directly from the landing page."
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 347,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 344,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/components/storefront-client.jsx",
-                            lineNumber: 333,
-                            columnNumber: 11
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/components/storefront-client.jsx",
-                        lineNumber: 332,
+                        lineNumber: 405,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -961,46 +1097,55 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                     children: "Collections"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                    lineNumber: 356,
+                                                    lineNumber: 435,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                                     children: "Featured pieces from Muskan's premium collection."
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                    lineNumber: 357,
+                                                    lineNumber: 436,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 355,
+                                            lineNumber: 434,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: filteredProducts.length ? `${filteredProducts.length} designs matching your selection.` : "No exact match yet. Try another search or browse the full collection."
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 359,
+                                            lineNumber: 438,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 354,
+                                    lineNumber: 433,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "product-grid",
                                     children: (filteredProducts.length ? filteredProducts : products).map((product)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("article", {
-                                            className: "product-card",
+                                            className: "product-card product-card--interactive",
+                                            role: "button",
+                                            tabIndex: 0,
+                                            onClick: ()=>openProductDetails(product.id),
+                                            onKeyDown: (event)=>{
+                                                if (event.key === "Enter" || event.key === " ") {
+                                                    event.preventDefault();
+                                                    openProductDetails(product.id);
+                                                }
+                                            },
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(ProductArt, {
                                                     product: product,
                                                     className: "product-card__image"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                    lineNumber: 369,
+                                                    lineNumber: 460,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1013,34 +1158,34 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                                     children: product.category
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                    lineNumber: 372,
+                                                                    lineNumber: 463,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 product.featured ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("mark", {
                                                                     children: "Featured"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                    lineNumber: 373,
+                                                                    lineNumber: 464,
                                                                     columnNumber: 43
                                                                 }, this) : null
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/storefront-client.jsx",
-                                                            lineNumber: 371,
+                                                            lineNumber: 462,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                                             children: product.name
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/storefront-client.jsx",
-                                                            lineNumber: 375,
+                                                            lineNumber: 466,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                             children: product.description
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/storefront-client.jsx",
-                                                            lineNumber: 376,
+                                                            lineNumber: 467,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1050,51 +1195,76 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                                                     children: formatPrice(product.price)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                    lineNumber: 378,
+                                                                    lineNumber: 469,
                                                                     columnNumber: 23
                                                                 }, this),
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                    className: "button button--ghost",
-                                                                    type: "button",
-                                                                    onClick: ()=>openEnquiry(product.id),
-                                                                    children: "Enquire"
-                                                                }, void 0, false, {
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "product-card__actions",
+                                                                    children: [
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                            className: "button button--ghost",
+                                                                            type: "button",
+                                                                            onClick: (event)=>{
+                                                                                event.stopPropagation();
+                                                                                openProductDetails(product.id);
+                                                                            },
+                                                                            children: "View Details"
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/components/storefront-client.jsx",
+                                                                            lineNumber: 471,
+                                                                            columnNumber: 25
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                            className: "button button--solid",
+                                                                            type: "button",
+                                                                            onClick: (event)=>{
+                                                                                event.stopPropagation();
+                                                                                openEnquiry(product.id);
+                                                                            },
+                                                                            children: "Enquire"
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/components/storefront-client.jsx",
+                                                                            lineNumber: 481,
+                                                                            columnNumber: 25
+                                                                        }, this)
+                                                                    ]
+                                                                }, void 0, true, {
                                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                                    lineNumber: 379,
+                                                                    lineNumber: 470,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/storefront-client.jsx",
-                                                            lineNumber: 377,
+                                                            lineNumber: 468,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/storefront-client.jsx",
-                                                    lineNumber: 370,
+                                                    lineNumber: 461,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, product.id, true, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 368,
+                                            lineNumber: 447,
                                             columnNumber: 17
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 366,
+                                    lineNumber: 445,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/storefront-client.jsx",
-                            lineNumber: 353,
+                            lineNumber: 432,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/storefront-client.jsx",
-                        lineNumber: 352,
+                        lineNumber: 431,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -1111,7 +1281,7 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                             children: "Seller Story"
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 393,
+                                            lineNumber: 503,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -1122,20 +1292,20 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 394,
+                                            lineNumber: 504,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: settings.heroText
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 395,
+                                            lineNumber: 505,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 392,
+                                    lineNumber: 502,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1145,20 +1315,20 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                             children: settings.sellerName
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 398,
+                                            lineNumber: 508,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Curator behind the collection"
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 399,
+                                            lineNumber: 509,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 397,
+                                    lineNumber: 507,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1168,20 +1338,20 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                             children: settings.boutiqueLocation
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 402,
+                                            lineNumber: 512,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Boutique-led styling and support"
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 403,
+                                            lineNumber: 513,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 401,
+                                    lineNumber: 511,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1191,31 +1361,31 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                             children: settings.contactEmail
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 406,
+                                            lineNumber: 516,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Primary customer contact"
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 407,
+                                            lineNumber: 517,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 405,
+                                    lineNumber: 515,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/storefront-client.jsx",
-                            lineNumber: 391,
+                            lineNumber: 501,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/storefront-client.jsx",
-                        lineNumber: 390,
+                        lineNumber: 500,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -1231,34 +1401,34 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                             children: "Contact"
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 415,
+                                            lineNumber: 525,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                             children: "Send a customer enquiry directly to Muskan Jewellery."
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 416,
+                                            lineNumber: 526,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: settings.contactEmail
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 417,
+                                            lineNumber: 527,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
                                             children: settings.whatsappNumber
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 418,
+                                            lineNumber: 528,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 414,
+                                    lineNumber: 524,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1268,24 +1438,24 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                     children: "Start Enquiry"
                                 }, void 0, false, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 420,
+                                    lineNumber: 530,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/storefront-client.jsx",
-                            lineNumber: 413,
+                            lineNumber: 523,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/storefront-client.jsx",
-                        lineNumber: 412,
+                        lineNumber: 522,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/storefront-client.jsx",
-                lineNumber: 224,
+                lineNumber: 321,
                 columnNumber: 7
             }, this),
             modalOpen ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1305,20 +1475,20 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                             children: "Customer Enquiry"
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 432,
+                                            lineNumber: 542,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                             children: selectedProduct ? `Ask about ${selectedProduct.name}` : "Book a jewellery consultation"
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 433,
+                                            lineNumber: 543,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 431,
+                                    lineNumber: 541,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1328,13 +1498,13 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                     children: "×"
                                 }, void 0, false, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 435,
+                                    lineNumber: 545,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/storefront-client.jsx",
-                            lineNumber: 430,
+                            lineNumber: 540,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -1347,7 +1517,7 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                     value: selectedProductId
                                 }, void 0, false, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 441,
+                                    lineNumber: 551,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -1360,13 +1530,13 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                             required: true
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 444,
+                                            lineNumber: 554,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 442,
+                                    lineNumber: 552,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -1379,13 +1549,13 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                             required: true
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 448,
+                                            lineNumber: 558,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 446,
+                                    lineNumber: 556,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -1397,13 +1567,13 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                             placeholder: "Optional phone number"
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 452,
+                                            lineNumber: 562,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 450,
+                                    lineNumber: 560,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -1416,13 +1586,13 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                             required: true
                                         }, void 0, false, {
                                             fileName: "[project]/components/storefront-client.jsx",
-                                            lineNumber: 456,
+                                            lineNumber: 566,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 454,
+                                    lineNumber: 564,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1432,7 +1602,7 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                     children: isSending ? "Sending..." : "Send Enquiry"
                                 }, void 0, false, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 458,
+                                    lineNumber: 568,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1440,30 +1610,278 @@ function StorefrontClient({ initialSettings, initialProducts }) {
                                     children: formMessage
                                 }, void 0, false, {
                                     fileName: "[project]/components/storefront-client.jsx",
-                                    lineNumber: 461,
+                                    lineNumber: 571,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/storefront-client.jsx",
-                            lineNumber: 440,
+                            lineNumber: 550,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/storefront-client.jsx",
-                    lineNumber: 429,
+                    lineNumber: 539,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/storefront-client.jsx",
-                lineNumber: 428,
+                lineNumber: 538,
+                columnNumber: 9
+            }, this) : null,
+            detailOpen && selectedProduct ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "modal-backdrop",
+                onClick: closeProductDetails,
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "modal-card modal-card--detail",
+                    onClick: (event)=>event.stopPropagation(),
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "modal-head",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "eyebrow",
+                                            children: "Jewellery Details"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 582,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                            children: selectedProduct.name
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 583,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/storefront-client.jsx",
+                                    lineNumber: 581,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    type: "button",
+                                    className: "modal-close",
+                                    onClick: closeProductDetails,
+                                    children: "×"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/storefront-client.jsx",
+                                    lineNumber: 585,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/storefront-client.jsx",
+                            lineNumber: 580,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "detail-layout",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: `detail-visual detail-visual--${inferMetal(selectedProduct)}`,
+                                    children: selectedProductImages.length ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                                        className: "detail-image",
+                                        src: selectedProductImages[selectedImageIndex],
+                                        alt: selectedProduct.name
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/storefront-client.jsx",
+                                        lineNumber: 593,
+                                        columnNumber: 19
+                                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(ProductArt, {
+                                        product: selectedProduct,
+                                        className: "detail-image"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/storefront-client.jsx",
+                                        lineNumber: 595,
+                                        columnNumber: 19
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/components/storefront-client.jsx",
+                                    lineNumber: 591,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "detail-copy",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "detail-copy__meta",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    children: selectedProduct.category
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/storefront-client.jsx",
+                                                    lineNumber: 601,
+                                                    columnNumber: 19
+                                                }, this),
+                                                selectedProduct.featured ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("mark", {
+                                                    children: "Featured"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/storefront-client.jsx",
+                                                    lineNumber: 602,
+                                                    columnNumber: 47
+                                                }, this) : null
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 600,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            className: "detail-price",
+                                            children: formatPrice(selectedProduct.price)
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 604,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            children: selectedProduct.description
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 605,
+                                            columnNumber: 17
+                                        }, this),
+                                        selectedProductImages.length > 1 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "detail-thumbnails",
+                                            children: selectedProductImages.map((imageUrl, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    type: "button",
+                                                    className: selectedImageIndex === index ? "is-active" : "",
+                                                    onClick: ()=>setSelectedImageIndex(index),
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                                                        src: imageUrl,
+                                                        alt: `${selectedProduct.name} ${index + 1}`
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/storefront-client.jsx",
+                                                        lineNumber: 616,
+                                                        columnNumber: 25
+                                                    }, this)
+                                                }, `${selectedProduct.id}-${index}`, false, {
+                                                    fileName: "[project]/components/storefront-client.jsx",
+                                                    lineNumber: 610,
+                                                    columnNumber: 23
+                                                }, this))
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 608,
+                                            columnNumber: 19
+                                        }, this) : null,
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "detail-note-grid",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                            children: "Boutique Guidance"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/storefront-client.jsx",
+                                                            lineNumber: 624,
+                                                            columnNumber: 21
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            children: "Ask about styling, gifting, festive looks, and occasion pairing."
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/storefront-client.jsx",
+                                                            lineNumber: 625,
+                                                            columnNumber: 21
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/components/storefront-client.jsx",
+                                                    lineNumber: 623,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                            children: "Direct Enquiry"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/storefront-client.jsx",
+                                                            lineNumber: 628,
+                                                            columnNumber: 21
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            children: "Connect with Muskan for availability, pricing, and delivery support."
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/storefront-client.jsx",
+                                                            lineNumber: 629,
+                                                            columnNumber: 21
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/components/storefront-client.jsx",
+                                                    lineNumber: 627,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 622,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "detail-actions",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    className: "button button--solid",
+                                                    type: "button",
+                                                    onClick: ()=>{
+                                                        closeProductDetails();
+                                                        openEnquiry(selectedProduct.id);
+                                                    },
+                                                    children: "Ask About This Piece"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/storefront-client.jsx",
+                                                    lineNumber: 634,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    className: "button button--ghost",
+                                                    type: "button",
+                                                    onClick: closeProductDetails,
+                                                    children: "Continue Browsing"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/storefront-client.jsx",
+                                                    lineNumber: 644,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/components/storefront-client.jsx",
+                                            lineNumber: 633,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/storefront-client.jsx",
+                                    lineNumber: 599,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/storefront-client.jsx",
+                            lineNumber: 590,
+                            columnNumber: 13
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/storefront-client.jsx",
+                    lineNumber: 579,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/components/storefront-client.jsx",
+                lineNumber: 578,
                 columnNumber: 9
             }, this) : null
         ]
     }, void 0, true, {
         fileName: "[project]/components/storefront-client.jsx",
-        lineNumber: 146,
+        lineNumber: 168,
         columnNumber: 5
     }, this);
 }

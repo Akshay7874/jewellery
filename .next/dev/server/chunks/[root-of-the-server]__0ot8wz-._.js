@@ -232,6 +232,12 @@ const productSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     imageUrl: {
         type: String,
         default: ""
+    },
+    imageUrls: {
+        type: [
+            String
+        ],
+        default: []
     }
 }, {
     timestamps: true

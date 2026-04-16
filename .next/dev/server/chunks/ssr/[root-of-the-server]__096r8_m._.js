@@ -232,6 +232,12 @@ const productSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     imageUrl: {
         type: String,
         default: ""
+    },
+    imageUrls: {
+        type: [
+            String
+        ],
+        default: []
     }
 }, {
     timestamps: true
@@ -484,6 +490,8 @@ function sanitizePublicSettings(settings) {
     };
 }
 function serialiseProduct(product) {
+    const imageUrls = Array.isArray(product.imageUrls) ? product.imageUrls.filter(Boolean) : [];
+    const primaryImage = imageUrls[0] || product.imageUrl || "";
     return {
         id: product.id,
         name: product.name,
@@ -491,7 +499,8 @@ function serialiseProduct(product) {
         description: product.description,
         price: product.price,
         featured: Boolean(product.featured),
-        imageUrl: product.imageUrl || "",
+        imageUrl: primaryImage,
+        imageUrls,
         createdAt: product.createdAt ? new Date(product.createdAt).toISOString() : null
     };
 }
